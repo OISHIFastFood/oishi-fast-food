@@ -1281,14 +1281,194 @@
       zoom: 0.76;
     }
   }
+
+  /* Funcionalidades de la version web interactiva */
+  .web-floating-menu {
+    position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
+    z-index: 9990; display: flex; flex-direction: column; gap: 8px;
+    padding: 10px; border: 1px solid rgba(255,255,255,.14); border-radius: 16px;
+    background: rgba(24,24,24,.94); box-shadow: 0 16px 42px rgba(0,0,0,.28);
+    backdrop-filter: blur(12px);
+  }
+  .web-floating-menu a, .web-floating-menu button {
+    min-width: 158px; min-height: 42px; border: 0; border-radius: 10px;
+    padding: 10px 13px; background: rgba(255,255,255,.08); color: #fff;
+    font: 700 11px/1.2 Arial,sans-serif; text-align: left; text-decoration: none;
+    cursor: pointer; transition: transform .22s ease, background-color .22s ease;
+  }
+  .web-floating-menu a:hover, .web-floating-menu button:hover,
+  .web-floating-menu a:focus-visible, .web-floating-menu button:focus-visible {
+    transform: translateX(-4px); background: var(--red); color: #fff;
+    outline: 2px solid rgba(255,255,255,.75); outline-offset: 2px;
+  }
+  .print-action { background: var(--red) !important; }
+  .web-version-stamp {
+    display: inline-grid; grid-template-columns: repeat(3,auto); gap: 9px;
+    align-items: center; width: max-content; margin-top: 18px; padding: 9px 12px;
+    border: 1px solid rgba(255,255,255,.28); color: rgba(255,255,255,.88);
+    font: 600 9px/1.25 'DM Mono',monospace; letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+  .web-version-stamp span + span {
+    border-left: 1px solid rgba(255,255,255,.25); padding-left: 9px;
+  }
+  .back-cover {
+    min-height: 1123px; position: relative; display: flex; flex-direction: column;
+    justify-content: space-between; overflow: hidden; padding: 82px 72px 58px;
+    background: radial-gradient(circle at 82% 18%,rgba(196,154,79,.22),transparent 27%),
+                linear-gradient(145deg,#181818 0%,#29231e 55%,#7c1f1d 145%);
+    color: #fff;
+  }
+  .back-cover::before {
+    content: ''; position: absolute; inset: 20px;
+    border: 1px solid rgba(255,255,255,.16); pointer-events: none;
+  }
+  .back-cover-content { position: relative; z-index: 1; max-width: 590px; }
+  .back-cover-kicker {
+    margin-bottom: 24px; color: var(--gold);
+    font: 700 10px/1.3 'DM Mono',monospace; letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .back-cover-title {
+    margin: 0 0 24px; font-size: clamp(42px,7vw,78px);
+    line-height: .98; letter-spacing: -3px;
+  }
+  .back-cover-copy {
+    max-width: 500px; color: rgba(255,255,255,.72);
+    font-size: 15px; line-height: 1.8;
+  }
+  .back-cover-details {
+    position: relative; z-index: 1; display: grid;
+    grid-template-columns: 1fr 148px; gap: 42px; align-items: end;
+  }
+  .back-cover-contact {
+    color: rgba(255,255,255,.76);
+    font: 500 11px/1.8 'DM Mono',monospace; overflow-wrap: anywhere;
+  }
+  .back-cover-contact strong {
+    display: block; margin-bottom: 7px; color: #fff;
+    font-family: Arial,sans-serif; font-size: 13px;
+  }
+  .qr-placeholder {
+    width: 148px; aspect-ratio: 1; display: grid; place-items: center;
+    border: 2px dashed rgba(255,255,255,.45); background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.72); font: 700 9px/1.45 'DM Mono',monospace;
+    letter-spacing: 1px; text-align: center; text-transform: uppercase;
+  }
+  .reveal-ready {
+    opacity: 0; transform: translateY(22px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .reveal-ready.is-visible { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .doc-wrap { width: min(100%,794px); }
+    .section, .cover, .toc-section, .back-cover { max-width: 100%; }
+    .web-floating-menu {
+      top: auto; right: 10px; bottom: 10px; left: 10px; transform: none;
+      flex-direction: row; justify-content: center; overflow-x: auto;
+      padding: 7px; border-radius: 13px;
+    }
+    .web-floating-menu a, .web-floating-menu button {
+      min-width: max-content; min-height: 40px; padding: 9px 11px;
+      text-align: center; font-size: 10px; white-space: nowrap;
+    }
+    .web-floating-menu a:hover, .web-floating-menu button:hover {
+      transform: translateY(-2px);
+    }
+  }
+  @media (max-width: 640px) {
+    body { overflow-x: hidden; }
+    .doc-wrap { box-shadow: none; }
+    .cover-content, .section-body, .manual-body, .toc-section, .colophon {
+      padding-left: 24px !important; padding-right: 24px !important;
+    }
+    .cover-top, .cover-bottom, .two-col, .team-grid, .colophon-meta,
+    .cargo-eval-grid, .manual-two-col, .back-cover-details {
+      grid-template-columns: 1fr !important; flex-direction: column;
+    }
+    .cover-title { font-size: clamp(52px,18vw,92px); }
+    .web-version-stamp { grid-template-columns: 1fr; }
+    .web-version-stamp span + span { border-left: 0; padding-left: 0; }
+    .toc-columns { column-count: 1 !important; }
+    .back-cover { min-height: 100vh; padding: 64px 28px 100px; }
+    .back-cover-details { gap: 24px; }
+    .qr-placeholder { width: 128px; }
+    .web-floating-menu a, .web-floating-menu button { font-size: 0; }
+    .web-floating-menu a::first-letter,
+    .web-floating-menu button::first-letter { font-size: 17px; }
+  }
+
+  @page { size: A4; margin: 5mm; }
+  @media print {
+    html, body {
+      width: auto !important; min-width: 0 !important; background: #fff !important;
+      color-adjust: exact; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .web-floating-menu, .modal-overlay { display: none !important; }
+    .doc-wrap, .section, .cover, .toc-section, .back-cover,
+    .content-card, .manual-box, .cargo-eval-card {
+      box-shadow: none !important; filter: none !important;
+    }
+    .doc-wrap {
+      width: 100% !important;
+      margin: 0 !important;
+      background: var(--cream) !important;
+    }
+    .section {
+      width: 100% !important;
+      min-height: auto !important;
+      break-before: auto !important;
+      page-break-before: auto !important;
+      break-after: auto !important;
+      page-break-after: auto !important;
+      break-inside: auto !important;
+      page-break-inside: auto !important;
+      overflow: visible !important;
+    }
+    .cover, .toc-section, .chapter-break, .back-cover {
+      width: 100% !important;
+      min-height: calc(297mm - 10mm) !important;
+      break-before: page !important;
+      page-break-before: always !important;
+      break-after: page !important;
+      page-break-after: always !important;
+    }
+    .cover:first-child {
+      break-before: auto !important;
+      page-break-before: auto !important;
+    }
+    .toc-section {
+      padding: 18px 25px 0 !important;
+      background: var(--cream) !important;
+    }
+    table, thead, tbody, tr, th, td, .content-card, .manual-box,
+    .manual-two-col, .cargo-eval-card, .section-img-block, .chart-wrap,
+    .foda-card, .value-card, figure, svg, canvas, img, .qr-placeholder {
+      break-inside: avoid !important; page-break-inside: avoid !important;
+    }
+    .back-cover {
+      min-height: calc(297mm - 10mm) !important;
+      break-after: auto; page-break-after: auto;
+    }
+    .section-divider { display: none !important; }
+    .reveal-ready { opacity: 1 !important; transform: none !important; }
+  }
 </style>
 </head>
 <body>
 
+<nav class="web-floating-menu" aria-label="Navegacion del documento">
+  <button class="print-action" type="button" onclick="window.print()" aria-label="Imprimir o guardar como PDF">📄 Imprimir / Guardar PDF</button>
+  <a href="#inicio" aria-label="Ir a la portada">🏠 Inicio</a>
+  <a href="#indice-auto" aria-label="Ir al indice">📚 Índice</a>
+  <a href="#inicio" aria-label="Volver arriba">⬆ Volver arriba</a>
+</nav>
+
 <div class="doc-wrap">
 
   <!-- ══════════════════ PORTADA ══════════════════ -->
-  <div class="cover section">
+  <div class="cover section" id="inicio">
     <div class="cover-texture"></div>
     <div class="cover-accent"></div>
     <div class="cover-accent-2"></div>
@@ -1304,6 +1484,9 @@
         <div class="cover-label">Gestión Estratégica</div>
         <div class="cover-title">OISHI<br><span>Fast</span><br>Food</div>
         <div class="cover-divider"></div>
+        <div class="web-version-stamp" aria-label="Informacion de version">
+          <span>Plan de Negocios</span><span>Version 2026</span><span>Version Web Interactiva</span>
+        </div>
         <div class="cover-tagline">Plan de negocios integral de Oishi Fast Food — negocio de comida rápida ubicado en Santiago de los Caballeros, República Dominicana, con proyección de crecimiento regional.</div>
       </div>
       <div class="cover-bottom">
@@ -1320,7 +1503,7 @@
   </div>
 
   <!-- ══════════════════ ÍNDICE ══════════════════ -->
-  <div class="toc-section section">
+  <div class="toc-section section" id="indice-auto">
     <div class="section-label">Contenido</div>
     <div class="toc-title">Tabla de Contenido</div>
     <ul class="toc-columns">
@@ -3364,6 +3547,26 @@
     </div>
   </div>
 
+  <section class="back-cover section" id="contraportada" aria-labelledby="back-cover-title">
+    <div class="back-cover-content">
+      <div class="back-cover-kicker">Oishi Fast Food · Plan de Negocios · 2026</div>
+      <h2 class="back-cover-title" id="back-cover-title">Gracias por su lectura.</h2>
+      <p class="back-cover-copy">Este documento presenta la visión estratégica, comercial, operativa y organizacional de Oishi Fast Food.</p>
+    </div>
+    <div class="back-cover-details">
+      <div class="back-cover-contact">
+        <strong>Información de contacto</strong>
+        Oishi Fast Food<br>
+        Santiago de los Caballeros, República Dominicana<br>
+        URL del proyecto:<br>
+        https://oishifastfood.github.io/oishi-fast-food/
+      </div>
+      <div class="qr-placeholder" role="img" aria-label="Espacio reservado para código QR">
+        Espacio reservado<br>para código QR
+      </div>
+    </div>
+  </section>
+
 </div><!-- /doc-wrap -->
 
 <!-- ══════════════════ MODAL ══════════════════ -->
@@ -3417,6 +3620,67 @@
   function closeModalOutside(e) {
     if (e.target === document.getElementById('modalOverlay')) closeModal();
   }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const toc = document.querySelector('#indice-auto .toc-columns');
+    const sections = Array.from(document.querySelectorAll('.doc-wrap > .section[id]'))
+      .filter(section => !['inicio', 'indice-auto', 'contraportada'].includes(section.id));
+
+    if (toc && sections.length) {
+      const sectionName = section => {
+        const title = section.querySelector(
+          '.sh-title, .manual-cargo-title, .chapter-title, .colophon-title, h1, h2'
+        );
+        return title ? title.textContent.trim() : section.id;
+      };
+
+      toc.innerHTML = '';
+      sections.forEach((section, index) => {
+        const item = document.createElement('li');
+        item.className = 'toc-item';
+        const link = document.createElement('a');
+        link.href = '#' + section.id;
+
+        const left = document.createElement('div');
+        left.className = 'toc-left';
+        const number = document.createElement('span');
+        number.className = 'toc-num';
+        number.textContent = String(index + 1).padStart(2, '0');
+        const name = document.createElement('span');
+        name.className = 'toc-name';
+        name.textContent = sectionName(section);
+        left.append(number, name);
+
+        const dots = document.createElement('div');
+        dots.className = 'toc-dots';
+        const page = document.createElement('span');
+        page.className = 'toc-page-num';
+        page.textContent = String(index + 3).padStart(2, '0');
+        link.append(left, dots, page);
+        item.appendChild(link);
+        toc.appendChild(item);
+      });
+    }
+
+    const revealTargets = document.querySelectorAll(
+      '.content-card, .manual-box, .cargo-eval-card, .section-img-block, .foda-card, .value-card'
+    );
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+      revealTargets.forEach(element => {
+        element.classList.add('reveal-ready');
+        observer.observe(element);
+      });
+    }
+  });
 </script>
 </body>
 </html>
