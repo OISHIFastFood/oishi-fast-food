@@ -3584,6 +3584,17 @@
 </div>
 
 <script>
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
+  window.addEventListener('load', function () {
+    if (window.location.hash) {
+      history.replaceState(null, document.title, window.location.pathname + window.location.search);
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  });
+
   function switchTab(btn, tabId) {
     document.querySelectorAll('.seg-tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.seg-tab-panel').forEach(p => p.classList.remove('active'));
