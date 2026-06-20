@@ -1285,7 +1285,8 @@
   /* Funcionalidades de la version web interactiva */
   .web-floating-menu {
     position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
-    z-index: 9990; display: flex; flex-direction: column; gap: 8px;
+    z-index: 99999; display: flex !important; visibility: visible !important;
+    opacity: 1 !important; flex-direction: column; gap: 8px;
     padding: 10px; border: 1px solid rgba(255,255,255,.14); border-radius: 16px;
     background: rgba(24,24,24,.94); box-shadow: 0 16px 42px rgba(0,0,0,.28);
     backdrop-filter: blur(12px);
