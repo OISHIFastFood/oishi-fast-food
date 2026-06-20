@@ -1597,6 +1597,27 @@
       page-break-inside: auto !important;
       overflow: visible !important;
     }
+    .doc-wrap > .section:first-child {
+      break-before: auto !important;
+      page-break-before: auto !important;
+    }
+    .section-header, .foda-header, .s3-header, .manual-header {
+      break-after: avoid-page !important;
+      page-break-after: avoid !important;
+    }
+    .section-header + .section-body,
+    .foda-header + .foda-grid,
+    .s3-header + .s3-body,
+    .manual-header + .manual-body {
+      break-before: avoid-page !important;
+      page-break-before: avoid !important;
+    }
+    .page-footer {
+      break-before: avoid-page !important;
+      page-break-before: avoid !important;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
     .cover, .toc-section, .chapter-break, .back-cover {
       width: 100% !important;
       min-height: calc(297mm - 10mm) !important;
@@ -1613,11 +1634,17 @@
       padding: 18px 25px 0 !important;
       background: var(--cream) !important;
     }
-    table, thead, tbody, tr, th, td, .content-card, .manual-box,
+    tr, .content-card, .manual-box,
     .manual-two-col, .cargo-eval-card, .section-img-block, .chart-wrap,
     .foda-card, .value-card, figure, svg, canvas, img, .qr-placeholder {
       break-inside: avoid !important; page-break-inside: avoid !important;
     }
+    table, thead, tbody, tfoot {
+      break-inside: auto !important;
+      page-break-inside: auto !important;
+    }
+    thead { display: table-header-group !important; }
+    tfoot { display: table-footer-group !important; }
     .back-cover {
       min-height: calc(297mm - 10mm) !important;
       break-after: auto; page-break-after: auto;
