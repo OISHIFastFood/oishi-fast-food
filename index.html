@@ -3900,6 +3900,7 @@
         <li>Bóveda, J. E., Oviedo, A., &amp; Yakusik, A. L. (2015). <em>Guía práctica para la elaboración de un plan de negocio</em>. Agencia de Cooperación Internacional del Japón (JICA) y Universidad Nacional de Asunción.</li>
         <li>Oishi Fast Food. (2026). <em>Información operativa, administrativa y financiera de la empresa</em> [Documento interno no publicado].</li>
         <li>Entrevista personal con la gerencia de Oishi Fast Food. (2026). <em>Información sobre operaciones, estructura organizacional y estrategias comerciales</em> [Comunicación personal].</li>
+        <li>Google. (2026). <em>Google Maps</em> [Servicio de cartografía digital]. Fuente utilizada para consultar ubicaciones, negocios cercanos y valoraciones de establecimientos competidores. Recuperado el 20 de junio de 2026, de https://www.google.com/maps</li>
       </ol>
     </div>
   </section>
@@ -4007,7 +4008,7 @@
         footer.className = 'page-footer';
         footer.innerHTML =
           '<div class="footer-brand">Oishi Fast Food</div>' +
-          '<div class="footer-center">Plan de Negocios · Continuación</div>' +
+          '<div class="footer-center">Plan de Negocios · 2026</div>' +
           '<div class="footer-right"></div>';
         page.appendChild(footer);
       }
@@ -4017,6 +4018,20 @@
         if (number) number.textContent = pageNumber;
       }
 
+    });
+
+    document.querySelectorAll('.print-continuation').forEach(element => element.remove());
+    const staleContinuation = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const staleNodes = [];
+    while (staleContinuation.nextNode()) {
+      if (staleContinuation.currentNode.nodeValue.trim() === 'Continuación · Oishi Fast Food') {
+        staleNodes.push(staleContinuation.currentNode);
+      }
+    }
+    staleNodes.forEach(node => {
+      const parent = node.parentElement;
+      if (parent && parent.childNodes.length === 1) parent.remove();
+      else node.remove();
     });
 
     const toc = document.querySelector('#indice-auto .toc-columns');
