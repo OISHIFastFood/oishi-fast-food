@@ -1361,6 +1361,46 @@
     transition: opacity .7s ease, transform .7s ease;
   }
   .reveal-ready.is-visible { opacity: 1; transform: none; }
+  .references-page {
+    background: var(--cream);
+  }
+  .references-body {
+    flex: 1;
+    padding: 46px 58px 30px;
+  }
+  .references-intro {
+    max-width: 610px;
+    margin-bottom: 26px;
+    color: var(--gray);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .references-list {
+    list-style: none;
+    display: grid;
+    gap: 16px;
+    counter-reset: reference;
+  }
+  .references-list li {
+    counter-increment: reference;
+    position: relative;
+    padding: 17px 20px 17px 58px;
+    border-left: 3px solid var(--red);
+    background: rgba(255,255,255,.72);
+    color: #3f3f3f;
+    font-size: 12.5px;
+    line-height: 1.72;
+  }
+  .references-list li::before {
+    content: counter(reference, decimal-leading-zero);
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    color: var(--gold);
+    font: 700 10px/1 'DM Mono',monospace;
+    letter-spacing: 1px;
+  }
+  .references-list em { font-style: italic; }
 
   @media (max-width: 900px) {
     .doc-wrap { width: min(100%,794px); }
@@ -1547,6 +1587,9 @@
       padding: 28px 22px;
     }
     .back-cover-title { letter-spacing: -1.5px; }
+    .references-body { padding: 32px 20px 90px; }
+    .references-list li { padding: 15px 15px 15px 48px; }
+    .references-list li::before { left: 14px; }
     .web-floating-menu {
       justify-content: flex-start;
       scrollbar-width: none;
@@ -1819,7 +1862,6 @@
       <li class="toc-item"><a href="#sec43"><div class="toc-left"><span class="toc-num">4.3</span><span class="toc-name">Manuales de Funciones</span></div><div class="toc-dots"></div><span class="toc-page-num">26</span></a></li>
       <li class="toc-item"><a href="#sec44"><div class="toc-left"><span class="toc-num">4.4</span><span class="toc-name">Proceso de Contratación</span></div><div class="toc-dots"></div><span class="toc-page-num">33</span></a></li>
       <li class="toc-item"><a href="#sec45"><div class="toc-left"><span class="toc-num">4.5</span><span class="toc-name">Evaluación de Desempeño</span></div><div class="toc-dots"></div><span class="toc-page-num">34</span></a></li>
-      <li class="toc-item toc-cap" style="border-top:2px solid var(--red); margin-top:4px; padding-top:12px;"><a href="#bibliografia"><div class="toc-left"><span class="toc-num" style="color:var(--gold);">Ref.</span><span class="toc-name" style="color:var(--red);">Bibliografía</span></div><div class="toc-dots"></div><span class="toc-page-num">39</span></a></li>
     </ul>
   <div class="page-footer"><div class="footer-brand">Oishi Fast Food</div><div class="footer-center">Plan de Negocios · 2026</div><div class="footer-right">02</div></div>
   </div>
@@ -3809,38 +3851,7 @@
 
 
 
-
   <div class="section-divider"></div>
-
-  <!-- ══════════════════ BIBLIOGRAFÍA ══════════════════ -->
-  <div class="section" id="bibliografia">
-    <div class="section-header cream">
-      <div class="sh-label">Referencias académicas</div>
-      <div class="sh-title">Bibliografía</div>
-    </div>
-    <div class="section-body">
-      <div class="big-num">Ref.</div>
-      <div class="content-card dark" style="margin-bottom:18px;">
-        <div class="card-label">Nota metodológica</div>
-        <div class="card-title">Fuentes utilizadas para la elaboración del eBook</div>
-        <p>El presente plan de negocios fue elaborado a partir de información real suministrada y observada en Oishi Fast Food, complementada con la guía práctica asignada para la estructura del proyecto y el libro de texto de la asignatura para sustentar los conceptos administrativos, estratégicos, comerciales, operativos y de gestión empresarial.</p>
-      </div>
-
-      <div class="content-card" style="margin-bottom:18px;">
-        <div class="card-label">Referencias en formato APA 7.ª edición</div>
-        <ol style="font-size:13px; line-height:1.85; color:var(--gray); padding-left:22px; margin:0;">
-          <li style="margin-bottom:14px;">Amaru Maximiano, A. C. (2008). <em>Administración para emprendedores: Fundamentos para la creación y gestión de nuevos negocios</em> (1.ª ed.). Pearson Educación de México.</li>
-          <li style="margin-bottom:14px;">Bóveda, J. E., Oviedo, A., &amp; Yakusik, A. L. (2015). <em>Guía práctica para la elaboración de un plan de negocio</em>. Agencia de Cooperación Internacional del Japón (JICA) y Universidad Nacional de Asunción.</li>
-          <li style="margin-bottom:14px;">Oishi Fast Food. (2026). <em>Información operativa, administrativa, comercial y financiera de la empresa</em> [Documento interno no publicado].</li>
-          <li>Gerencia de Oishi Fast Food. (2026). <em>Información sobre operaciones, estructura organizacional, productos, procesos y estrategias comerciales</em> [Comunicación personal].</li>
-        </ol>
-      </div>
-
-      <div class="pull-quote">Las fuentes empresariales internas permiten adaptar los conceptos académicos a la realidad operativa de Oishi Fast Food.</div>
-
-      <div class="page-footer"><div class="footer-brand">Oishi Fast Food</div><div class="footer-center">Plan de Negocios · Bibliografía</div><div class="footer-right">39</div></div>
-    </div>
-  </div>
 
   <!-- ══════════════════ COLOFÓN ══════════════════ -->
   <div class="colophon section">
@@ -3858,11 +3869,28 @@
     </div>
   </div>
 
+  <section class="references-page section" id="referencias" aria-labelledby="references-title">
+    <div class="section-header">
+      <div class="section-header-num">R</div>
+      <div class="sh-label">Fuentes académicas y documentales</div>
+      <div class="sh-title" id="references-title">Referencias</div>
+    </div>
+    <div class="references-body">
+      <p class="references-intro">Fuentes consultadas para la formulación y documentación del Plan de Negocios de Oishi Fast Food.</p>
+      <ol class="references-list">
+        <li>Amaru Maximiano, A. C. (2008). <em>Administración para emprendedores: Fundamentos para la creación y gestión de nuevos negocios</em> (1.ª ed.). Pearson Educación de México.</li>
+        <li>Bóveda, J. E., Oviedo, A., &amp; Yakusik, A. L. (2015). <em>Guía práctica para la elaboración de un plan de negocio</em>. Agencia de Cooperación Internacional del Japón (JICA) y Universidad Nacional de Asunción.</li>
+        <li>Oishi Fast Food. (2026). <em>Información operativa, administrativa y financiera de la empresa</em> [Documento interno no publicado].</li>
+        <li>Entrevista personal con la gerencia de Oishi Fast Food. (2026). <em>Información sobre operaciones, estructura organizacional y estrategias comerciales</em> [Comunicación personal].</li>
+      </ol>
+    </div>
+  </section>
+
   <section class="back-cover section" id="contraportada" aria-labelledby="back-cover-title">
     <div class="back-cover-content">
       <div class="back-cover-kicker">Oishi Fast Food · Plan de Negocios · 2026</div>
       <h2 class="back-cover-title" id="back-cover-title">Gracias por su lectura.</h2>
-      <p class="back-cover-copy">Este documento presenta la visión estratégica, comercial, operativa y organizacional de Oishi Fast Food.</p>
+      <p class="back-cover-copy">Este proyecto continúa en desarrollo y evolucionará con nuevas estrategias, análisis y mejoras orientadas al crecimiento de Oishi Fast Food.</p>
     </div>
     <div class="back-cover-details">
       <div class="back-cover-contact">
