@@ -1652,6 +1652,87 @@
     .section-divider { display: none !important; }
     .reveal-ready { opacity: 1 !important; transform: none !important; }
   }
+
+  /* Maquetacion editorial A4: una seccion identificada por pagina */
+  @media print {
+    @page { size: A4 portrait; margin: 5mm; }
+
+    .doc-wrap > .section {
+      width: 100% !important;
+      height: calc(297mm - 10mm) !important;
+      min-height: calc(297mm - 10mm) !important;
+      max-height: calc(297mm - 10mm) !important;
+      margin: 0 !important;
+      break-before: page !important;
+      page-break-before: always !important;
+      break-after: page !important;
+      page-break-after: always !important;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow: hidden !important;
+      position: relative !important;
+    }
+    .doc-wrap > .section:first-child {
+      break-before: auto !important;
+      page-break-before: auto !important;
+    }
+    .doc-wrap > .section:last-child {
+      break-after: auto !important;
+      page-break-after: auto !important;
+    }
+    .cover, .chapter-break, .back-cover {
+      height: calc(297mm - 10mm) !important;
+      min-height: calc(297mm - 10mm) !important;
+    }
+    .cover-content, .section-body, .s3-body, .manual-body,
+    .foda-grid, .colophon, .toc-section {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    .page-footer {
+      margin-top: auto !important;
+      flex: 0 0 44px !important;
+      width: 100% !important;
+    }
+    .chapter-break > .page-footer {
+      position: relative;
+      z-index: 8;
+      background: rgba(10,10,10,.94) !important;
+    }
+    .toc-section {
+      padding: 30px 38px 0 !important;
+    }
+    .toc-title { margin-bottom: 18px !important; }
+    .toc-item { padding-top: 6px !important; padding-bottom: 6px !important; }
+    .colophon {
+      padding-top: 42px !important;
+      padding-bottom: 20px !important;
+    }
+    .print-continuation {
+      display: block !important;
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      z-index: 20;
+      color: rgba(255,255,255,.4);
+      font: 700 7px/1.2 'DM Mono',monospace;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .section:not(.cover):not(.chapter-break):not(.back-cover)::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(var(--gold), var(--red));
+      opacity: .85;
+      pointer-events: none;
+    }
+  }
 </style>
 </head>
 <body>
@@ -3831,6 +3912,35 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    const ebookPages = Array.from(document.querySelectorAll('.doc-wrap > .section'));
+    ebookPages.forEach((page, index) => {
+      const pageNumber = String(index + 1).padStart(2, '0');
+      let footer = page.querySelector(':scope > .page-footer');
+
+      if (!footer && !page.classList.contains('cover') && !page.classList.contains('back-cover')) {
+        footer = document.createElement('div');
+        footer.className = 'page-footer';
+        footer.innerHTML =
+          '<div class="footer-brand">Oishi Fast Food</div>' +
+          '<div class="footer-center">Plan de Negocios · Continuación</div>' +
+          '<div class="footer-right"></div>';
+        page.appendChild(footer);
+      }
+
+      if (footer) {
+        const number = footer.querySelector('.footer-right');
+        if (number) number.textContent = pageNumber;
+      }
+
+      if (index > 1 && !page.classList.contains('back-cover')) {
+        const marker = document.createElement('span');
+        marker.className = 'print-continuation';
+        marker.textContent = 'Continuación · Oishi Fast Food';
+        marker.setAttribute('aria-hidden', 'true');
+        page.appendChild(marker);
+      }
+    });
+
     const toc = document.querySelector('#indice-auto .toc-columns');
     const sections = Array.from(document.querySelectorAll('.doc-wrap > .section[id]'))
       .filter(section => !['inicio', 'indice-auto', 'contraportada'].includes(section.id));
