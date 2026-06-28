@@ -1389,6 +1389,78 @@
       zoom: 0.76;
     }
   }
+
+
+/* ==========================================================
+   AJUSTE RESPONSIVE MÓVIL — SIN CAMBIAR ESTRUCTURA DEL EBOOK
+   Mantiene A4 para impresión y adapta la lectura en celular.
+========================================================== */
+@media screen and (max-width: 860px) {
+  html,
+  body {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background: #2a2a2a !important;
+  }
+
+  .doc-wrap {
+    width: 100% !important;
+    max-width: 794px !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+  }
+
+  .section {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .cover {
+    min-height: clamp(620px, 145vw, 680px) !important;
+  }
+
+  .chapter-break {
+    min-height: clamp(380px, 90vw, 420px) !important;
+  }
+
+  .page,
+  .cap5-wrapper .page {
+    width: 100% !important;
+    max-width: 794px !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    padding: clamp(36px, 6.8vw, 52px) clamp(28px, 7vw, 56px) clamp(54px, 10vw, 80px) !important;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100% !important;
+    height: auto;
+  }
+
+  table {
+    max-width: 100%;
+  }
+
+  .op-table-wrap,
+  .table-wrap,
+  .financial-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 </style>
 </head>
 <body>
