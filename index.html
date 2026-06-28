@@ -864,69 +864,42 @@
   /* ── PRINT ── */
   @media print {
     @page { size: A4; margin: 0; }
+
     html, body {
       width: 210mm;
-      min-height: 297mm;
-      background: white !important;
+      margin: 0 !important;
+      background: #fff !important;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
-    body { margin: 0 !important; }
+
     .doc-wrap {
       width: 210mm !important;
-      margin: 0 !important;
+      margin: 0 auto !important;
       box-shadow: none !important;
       background: var(--white) !important;
     }
+
     .modal-overlay,
     .section-divider { display: none !important; }
 
+    /* Mantiene el diseño original: no fuerza alturas ni agrega espacios en blanco */
     .section {
       width: 210mm !important;
-      min-height: 297mm !important;
-      break-before: page;
-      page-break-before: always;
-      break-inside: avoid;
-      page-break-inside: avoid;
-      display: flex;
-      flex-direction: column;
+      min-height: auto !important;
+      break-before: auto !important;
+      page-break-before: auto !important;
+      break-inside: auto !important;
+      page-break-inside: auto !important;
       overflow: visible !important;
     }
-    .section:first-child {
-      break-before: auto;
-      page-break-before: auto;
-    }
+
     .cover,
-    .chapter-break {
-      min-height: 297mm !important;
-    }
+    .chapter-break,
     .toc-section {
-      min-height: 297mm !important;
-      padding: 36px 48px 0 !important;
+      min-height: auto !important;
     }
-    .cover-content,
-    .section-body,
-    .s3-body,
-    .foda-grid,
-    .colophon {
-      flex: 1 1 auto;
-    }
-    .page-footer {
-      margin-top: auto;
-      flex: 0 0 44px;
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
-    .toc-grid-container {
-      break-inside: auto;
-      page-break-inside: auto;
-    }
-    .toc-columns {
-      column-count: 2 !important;
-      column-gap: 44px !important;
-      break-inside: auto;
-      page-break-inside: auto;
-    }
+
     table,
     thead,
     tbody,
@@ -952,18 +925,9 @@
       break-inside: avoid;
       page-break-inside: avoid;
     }
+
     .op-table thead { display: table-header-group; }
     .op-table tfoot { display: table-footer-group; }
-
-    .section-header { padding-top: 26px; padding-bottom: 22px; }
-    .section-body { padding-top: 28px; padding-bottom: 34px; }
-    .s3-body { padding-top: 22px; padding-bottom: 28px; }
-    .foda-grid { padding-bottom: 28px; }
-    .toc-title { margin-bottom: 20px; font-size: 30px !important; }
-    .toc-item { padding-top: 7px !important; padding-bottom: 7px !important; }
-    .toc-name { font-size: 13px !important; }
-    .toc-num { font-size: 9px !important; }
-    .toc-page-num { font-size: 9px !important; }
   }
 
   /* ════════════════════════════════════════
