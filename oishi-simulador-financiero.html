@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oishi Fast Food · Simulador Financiero Cap. 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Montserrat:wght@400;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B2545; --navy-dark:#071a33; --gold:#D9A441; --gold-dark:#B5842C;
+    --cream:#FAF7F1; --card:#FFFFFF; --line:#E4E0D6; --gray:#5C5C5C;
+    --green:#1E7A46; --red:#B23A2E; --yasmin:#2464A8; --david:#B5842C; --juan:#1E7A46;
+    --shadow:0 2px 10px rgba(11,37,69,0.06);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Source Sans 3',sans-serif;background:var(--cream);color:var(--navy-dark);}
+  h1,h2,h3{font-family:'Playfair Display',serif;margin:0;}
+  .eyebrow{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);}
+  .topbar{background:var(--navy);color:#fff;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .topbar .brand{display:flex;flex-direction:column;gap:2px;}
+  .topbar h1{font-size:20px;color:#fff;}
+  .topbar .sub{font-family:'Montserrat',sans-serif;font-size:11px;color:#C9D3E0;letter-spacing:1px;}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;}
+  button{font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.4px;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;transition:transform .1s;}
+  button:active{transform:scale(0.97);}
+  .btn-gold{background:var(--gold);color:var(--navy-dark);}
+  .btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4);}
+  .btn-word{background:var(--green);color:#fff;}
+  input[type=file]{display:none;}
+
+  .layout{display:flex;max-width:1180px;margin:0 auto;min-height:calc(100vh - 78px);}
+  nav.side{width:250px;flex-shrink:0;background:#fff;border-right:1px solid var(--line);padding:18px 0;}
+  nav.side .group-label{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#9a9a9a;padding:14px 20px 6px;}
+  nav.side a{display:flex;align-items:center;gap:10px;padding:10px 20px;text-decoration:none;color:var(--navy-dark);font-size:13.5px;font-weight:600;border-left:3px solid transparent;}
+  nav.side a .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  nav.side a.active{background:var(--cream);border-left-color:var(--gold);color:var(--navy);}
+  nav.side a:hover{background:#f7f5f0;}
+
+  main{flex:1;padding:28px 32px 80px;max-width:820px;}
+  .module{display:none;}
+  .module.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .mod-header{border-left:5px solid var(--gold);padding-left:16px;margin-bottom:20px;}
+  .mod-header .eyebrow{margin-bottom:4px;}
+  .mod-header h2{font-size:24px;color:var(--navy);}
+  .badge{display:inline-block;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;color:#fff;margin-left:10px;vertical-align:middle;}
+  .badge.yasmin{background:var(--yasmin);}
+  .badge.david{background:var(--david);}
+  .badge.juan{background:var(--juan);}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:18px;box-shadow:var(--shadow);}
+  .card h3{font-size:13px;font-family:'Montserrat',sans-serif;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--gray);margin-bottom:5px;}
+  .field input[type=number], .field input[type=text]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;font-family:'Source Sans 3',sans-serif;background:#fcfbf9;}
+  .field input:focus{outline:2px solid var(--gold);border-color:var(--gold);}
+  .field textarea{width:100%;min-height:120px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;font-family:'Source Sans 3',sans-serif;resize:vertical;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  @media(max-width:640px){.grid2,.grid3{grid-template-columns:1fr;}}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{background:var(--navy);color:#fff;padding:9px 10px;text-align:left;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.3px;}
+  td{padding:9px 10px;border-bottom:1px solid var(--line);}
+  tr.total td{font-weight:700;background:#FBF3E1;color:var(--navy);border-top:2px solid var(--gold);}
+  tr.sub td{background:#F7F5F0;font-weight:700;}
+  .num{text-align:right;font-variant-numeric:tabular-nums;}
+  .neg{color:var(--red);}
+  .pos{color:var(--green);}
+
+  .warn{background:#FFF6E5;border:1px solid var(--gold);color:#7A5A16;font-size:12.5px;padding:10px 14px;border-radius:8px;margin-bottom:14px;}
+  .ok{background:#EAF6EE;border:1px solid var(--green);color:#175C33;font-size:12.5px;padding:10px 14px;border-radius:8px;margin-bottom:14px;}
+
+  .kpi-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .kpi{flex:1;min-width:150px;background:var(--navy);color:#fff;border-radius:12px;padding:16px 18px;}
+  .kpi .lbl{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#C9D3E0;}
+  .kpi .val{font-family:'Playfair Display',serif;font-size:24px;margin-top:4px;}
+  .kpi.gold{background:var(--gold);color:var(--navy-dark);}
+  .kpi.gold .lbl{color:#6B4E17;}
+
+  .navfoot{display:flex;justify-content:space-between;margin-top:22px;}
+  .navfoot button{background:var(--navy);color:#fff;}
+  .navfoot button.disabled{opacity:0.35;pointer-events:none;}
+
+  .progressbar{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin:0 0 18px;}
+  .progressbar div{height:100%;background:var(--gold);transition:width .3s;}
+
+  footer.pagefoot{text-align:center;font-size:11px;color:#9a9a9a;padding:20px;font-family:'Montserrat',sans-serif;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <h1>Oishi Fast Food — Simulador Financiero</h1>
+    <div class="sub">CAPÍTULO 6 · ANÁLISIS FINANCIERO · UAPA ADM309</div>
+  </div>
+  <div class="actions">
+    <button class="btn-outline" onclick="document.getElementById('loadFile').click()">📂 Cargar avance</button>
+    <input type="file" id="loadFile" accept="application/json">
+    <button class="btn-gold" onclick="guardarAvance()">💾 Guardar avance</button>
+    <button class="btn-word" onclick="exportarWord()">📄 Exportar a Word</button>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="side" id="sideNav"></nav>
+  <main>
+    <div class="progressbar"><div id="progressFill" style="width:0%"></div></div>
+    <div id="modules"></div>
+  </main>
+</div>
+
+<footer class="pagefoot">Oishi Fast Food · Plan de Negocios UAPA · Herramienta interna del equipo (Yasmín · David · Juan)</footer>
+
+<script>
+/* ============ CONFIGURACIÓN DE MÓDULOS ============ */
+const MODULES = [
+  {id:"m1", num:"6.1", title:"Inversión Total", owner:"yasmin", ownerName:"Yasmín"},
+  {id:"m2", num:"6.2", title:"Depreciación (DGII)", owner:"yasmin", ownerName:"Yasmín"},
+  {id:"m3", num:"6.3", title:"Presupuesto de Venta", owner:"yasmin", ownerName:"Yasmín"},
+  {id:"m4", num:"6.4", title:"Costo Total de Operación", owner:"david", ownerName:"David"},
+  {id:"m5", num:"6.5", title:"Costo de Personal (TSS)", owner:"david", ownerName:"David"},
+  {id:"m6", num:"6.6", title:"Estado de Resultado", owner:"david", ownerName:"David", auto:true},
+  {id:"m7", num:"6.7", title:"Indicadores de Viabilidad (VAN/TIR)", owner:"juan", ownerName:"Juan"},
+  {id:"m8", num:"6.8", title:"Evaluación de la Inversión", owner:"juan", ownerName:"Juan", auto:true},
+  {id:"m9", num:"6.9", title:"Evaluación del Plan de Negocio", owner:"juan", ownerName:"Juan"},
+];
+
+/* ============ ESTADO (valores precargados acordados) ============ */
+let DATA = {
+  af: 950000, ai: 40000, ct: 350000,                 // 6.1
+  cat1: 150000, cat2: 60000, cat3: 740000,           // 6.2
+  precio: 291, cantidad: 2352,                        // 6.3
+  costoVar: 103, alquiler: 55000, otrosFijos: 35000, // 6.4
+  nomina: 257000,                                     // 6.5
+  tasaDescuento: 12,                                  // 6.7
+  conclusiones: ""                                    // 6.9
+};
+
+const fmt = n => "RD$" + (isFinite(n)?n:0).toLocaleString('es-DO',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct = n => (isFinite(n)?n:0).toFixed(2)+"%";
+
+/* ============ CÁLCULOS ============ */
+function calc(){
+  const d = DATA;
+  const inversionTotal = d.af + d.ai + d.ct;
+
+  const dep1 = d.cat1*0.05, dep2 = d.cat2*0.25, dep3 = d.cat3*0.15;
+  const depTotal = dep1+dep2+dep3;
+
+  const ventaMensual = d.precio*d.cantidad, ventaAnual = ventaMensual*12;
+
+  const costoVarMensual = d.costoVar*d.cantidad, costoVarAnual = costoVarMensual*12;
+  const fijosMensual = d.alquiler+d.otrosFijos, fijosAnual = fijosMensual*12;
+  const costoOperMensual = costoVarMensual+fijosMensual, costoOperAnual = costoOperMensual*12;
+
+  const sfs = d.nomina*0.0709, afp = d.nomina*0.0710, srl = d.nomina*0.0115, infotep = d.nomina*0.01;
+  const cargas = sfs+afp+srl+infotep;
+  const nominaCompletaMensual = d.nomina+cargas, nominaCompletaAnual = nominaCompletaMensual*12;
+
+  const utilidadBruta = ventaAnual - costoVarAnual;
+  const uai = utilidadBruta - nominaCompletaAnual - fijosAnual - depTotal;
+  const isr = uai>0 ? uai*0.27 : 0;
+  const utilidadNeta = uai - isr;
+
+  const flujoAnual = utilidadNeta + depTotal;
+  const tasa = d.tasaDescuento/100;
+  let van = -inversionTotal;
+  for(let t=1;t<=5;t++){ van += flujoAnual/Math.pow(1+tasa,t); }
+
+  const flujos = [-inversionTotal, flujoAnual, flujoAnual, flujoAnual, flujoAnual, flujoAnual];
+  const tir = calcularTIR(flujos);
+
+  return {inversionTotal, dep1,dep2,dep3,depTotal, ventaMensual,ventaAnual,
+    costoVarMensual,costoVarAnual,fijosMensual,fijosAnual,costoOperMensual,costoOperAnual,
+    sfs,afp,srl,infotep,cargas,nominaCompletaMensual,nominaCompletaAnual,
+    utilidadBruta,uai,isr,utilidadNeta,flujoAnual,van,tir};
+}
+
+function calcularTIR(cf){
+  function npv(r){ let v=0; cf.forEach((c,i)=> v += c/Math.pow(1+r,i)); return v; }
+  let lo=-0.9, hi=5;
+  if(npv(lo)*npv(hi) > 0) return NaN;
+  for(let i=0;i<200;i++){
+    const mid=(lo+hi)/2;
+    if(npv(lo)*npv(mid) <= 0) hi=mid; else lo=mid;
+  }
+  return (lo+hi)/2;
+}
+
+/* ============ RENDER ============ */
+function renderNav(){
+  const nav = document.getElementById('sideNav');
+  let html = '';
+  let lastOwner = null;
+  MODULES.forEach(m=>{
+    if(m.owner !== lastOwner){
+      html += `<div class="group-label">${m.ownerName}</div>`;
+      lastOwner = m.owner;
+    }
+    html += `<a href="#" data-target="${m.id}" class="navlink" onclick="showModule('${m.id}');return false;">
+      <span class="dot" style="background:var(--${m.owner})"></span> ${m.num} ${m.title}
+    </a>`;
+  });
+  nav.innerHTML = html;
+}
+
+function showModule(id){
+  document.querySelectorAll('.module').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.navlink').forEach(el=>el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector(`.navlink[data-target="${id}"]`).classList.add('active');
+  const idx = MODULES.findIndex(m=>m.id===id);
+  document.getElementById('progressFill').style.width = (((idx+1)/MODULES.length)*100)+"%";
+  window.scrollTo(0,0);
+}
+
+function navFoot(id){
+  const idx = MODULES.findIndex(m=>m.id===id);
+  const prev = MODULES[idx-1], next = MODULES[idx+1];
+  return `<div class="navfoot">
+    <button class="${prev?'':'disabled'}" onclick="showModule('${prev?prev.id:''}')">← Anterior</button>
+    <button class="${next?'':'disabled'}" onclick="showModule('${next?next.id:''}')">Siguiente →</button>
+  </div>`;
+}
+
+function badge(owner,name){ return `<span class="badge ${owner}">${name}</span>`; }
+
+function renderModules(){
+  const c = calc();
+  const el = document.getElementById('modules');
+  el.innerHTML = `
+
+  <!-- 6.1 -->
+  <div class="module" id="m1">
+    <div class="mod-header"><div class="eyebrow">Módulo 6.1</div><h2>Inversión Total ${badge('yasmin','Yasmín')}</h2></div>
+    <div class="card">
+      <h3>Entrada de datos</h3>
+      <div class="grid3">
+        <div class="field"><label>Activos Fijos (RD$)</label><input type="number" id="af" value="${DATA.af}" oninput="upd('af',this.value)"></div>
+        <div class="field"><label>Activos Intangibles (RD$)</label><input type="number" id="ai" value="${DATA.ai}" oninput="upd('ai',this.value)"></div>
+        <div class="field"><label>Capital de Trabajo (RD$)</label><input type="number" id="ct" value="${DATA.ct}" oninput="upd('ct',this.value)"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Matriz 6.1 — Consolidado de Inversión Inicial</h3>
+      <table><thead><tr><th>Componente</th><th class="num">Monto (RD$)</th><th class="num">%</th></tr></thead><tbody>
+        <tr><td>Activos Fijos</td><td class="num">${fmt(DATA.af)}</td><td class="num">${pct(DATA.af/c.inversionTotal*100)}</td></tr>
+        <tr><td>Activos Intangibles</td><td class="num">${fmt(DATA.ai)}</td><td class="num">${pct(DATA.ai/c.inversionTotal*100)}</td></tr>
+        <tr><td>Capital de Trabajo</td><td class="num">${fmt(DATA.ct)}</td><td class="num">${pct(DATA.ct/c.inversionTotal*100)}</td></tr>
+        <tr class="total"><td>INVERSIÓN TOTAL REQUERIDA</td><td class="num">${fmt(c.inversionTotal)}</td><td class="num">100.00%</td></tr>
+      </tbody></table>
+    </div>
+    ${navFoot('m1')}
+  </div>
+
+  <!-- 6.2 -->
+  <div class="module" id="m2">
+    <div class="mod-header"><div class="eyebrow">Módulo 6.2</div><h2>Depreciación (DGII) ${badge('yasmin','Yasmín')}</h2></div>
+    ${Math.abs((DATA.cat1+DATA.cat2+DATA.cat3)-DATA.af) > 0.5 ?
+      `<div class="warn">⚠️ La suma de las 3 categorías (${fmt(DATA.cat1+DATA.cat2+DATA.cat3)}) no coincide con los Activos Fijos de 6.1 (${fmt(DATA.af)}). Ajusta para que cuadren.</div>` :
+      `<div class="ok">✓ Las categorías cuadran con los Activos Fijos de 6.1.</div>`}
+    <div class="card">
+      <h3>Entrada de datos — Desglose por categoría DGII</h3>
+      <div class="grid3">
+        <div class="field"><label>Cat. 1 — Edificaciones/Mejoras (5%)</label><input type="number" id="cat1" value="${DATA.cat1}" oninput="upd('cat1',this.value)"></div>
+        <div class="field"><label>Cat. 2 — Vehículos/Equipos/Tecnología (25%)</label><input type="number" id="cat2" value="${DATA.cat2}" oninput="upd('cat2',this.value)"></div>
+        <div class="field"><label>Cat. 3 — Maquinaria Pesada (15%)</label><input type="number" id="cat3" value="${DATA.cat3}" oninput="upd('cat3',this.value)"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Matriz 6.2 — Cronograma Anual de Depreciación</h3>
+      <table><thead><tr><th>Categoría</th><th class="num">Inversión</th><th>Tasa</th><th class="num">Gasto Anual</th></tr></thead><tbody>
+        <tr><td>Categoría 1</td><td class="num">${fmt(DATA.cat1)}</td><td>5%</td><td class="num">${fmt(c.dep1)}</td></tr>
+        <tr><td>Categoría 2</td><td class="num">${fmt(DATA.cat2)}</td><td>25%</td><td class="num">${fmt(c.dep2)}</td></tr>
+        <tr><td>Categoría 3</td><td class="num">${fmt(DATA.cat3)}</td><td>15%</td><td class="num">${fmt(c.dep3)}</td></tr>
+        <tr class="total"><td>TOTALES</td><td class="num">${fmt(DATA.cat1+DATA.cat2+DATA.cat3)}</td><td>-</td><td class="num">${fmt(c.depTotal)}</td></tr>
+      </tbody></table>
+    </div>
+    ${navFoot('m2')}
+  </div>
+
+  <!-- 6.3 -->
+  <div class="module" id="m3">
+    <div class="mod-header"><div class="eyebrow">Módulo 6.3</div><h2>Presupuesto de Venta ${badge('yasmin','Yasmín')}</h2></div>
+    <div class="card">
+      <h3>Entrada de datos — Estimación comercial</h3>
+      <div class="grid2">
+        <div class="field"><label>Precio Promedio Ponderado (RD$)</label><input type="number" id="precio" value="${DATA.precio}" oninput="upd('precio',this.value)"></div>
+        <div class="field"><label>Cantidad Estimada Vendida / Mes</label><input type="number" id="cantidad" value="${DATA.cantidad}" oninput="upd('cantidad',this.value)"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Matriz 6.3 — Proyección de Ingresos</h3>
+      <table><thead><tr><th>Frecuencia</th><th class="num">Unidades</th><th class="num">Precio</th><th class="num">Ingreso</th></tr></thead><tbody>
+        <tr><td>Mensual</td><td class="num">${DATA.cantidad.toLocaleString('es-DO')}</td><td class="num">${fmt(DATA.precio)}</td><td class="num">${fmt(c.ventaMensual)}</td></tr>
+        <tr class="total"><td>ANUAL</td><td class="num">${(DATA.cantidad*12).toLocaleString('es-DO')}</td><td class="num">${fmt(DATA.precio)}</td><td class="num">${fmt(c.ventaAnual)}</td></tr>
+      </tbody></table>
+    </div>
+    ${navFoot('m3')}
+  </div>
+
+  <!-- 6.4 -->
+  <div class="module" id="m4">
+    <div class="mod-header"><div class="eyebrow">Módulo 6.4</div><h2>Costo Total de Operación ${badge('david','David')}</h2></div>
+    <div class="card">
+      <h3>Entrada de datos — Costos fijos y variables mensuales</h3>
+      <div class="grid3">
+        <div class="field"><label>Costo Variable Unitario (RD$/orden)</label><input type="number" id="costoVar" value="${DATA.costoVar}" oninput="upd('costoVar',this.value)"></div>
+        <div class="field"><label>Alquiler Local (Mensual)</label><input type="number" id="alquiler" value="${DATA.alquiler}" oninput="upd('alquiler',this.value)"></div>
+        <div class="field"><label>Otros Fijos: Luz/Agua/Internet (Mensual)</label><input type="number" id="otrosFijos" value="${DATA.otrosFijos}" oninput="upd('otrosFijos',this.value)"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Matriz 6.4 — Estructura de Costos Operativos</h3>
+      <table><thead><tr><th>Concepto</th><th class="num">Mensual</th><th class="num">Anual</th></tr></thead><tbody>
+        <tr><td>Costos Variables Totales</td><td class="num">${fmt(c.costoVarMensual)}</td><td class="num">${fmt(c.costoVarAnual)}</td></tr>
+        <tr><td>Costos Fijos (Alquiler + Servicios)</td><td class="num">${fmt(c.fijosMensual)}</td><td class="num">${fmt(c.fijosAnual)}</td></tr>
+        <tr class="total"><td>COSTOS OPERACIONALES DIRECTOS</td><td class="num">${fmt(c.costoOperMensual)}</td><td class="num">${fmt(c.costoOperAnual)}</td></tr>
+      </tbody></table>
+    </div>
+    ${navFoot('m4')}
+  </div>
+
+  <!-- 6.5 -->
+  <div class="module" id="m5">
+    <div class="mod-header"><div class="eyebrow">Módulo 6.5</div><h2>Costo de Personal (TSS) ${badge('david','David')}</h2></div>
+    <div class="card">
+      <h3>Entrada de datos — Nómina de los 13 colaboradores fijos</h3>
+      <div class="field"><label>Total de Nómina Base Mensual (suma de los 13 sueldos)</label><input type="number" id="nomina" value="${DATA.nomina}" oninput="upd('nomina',this.value)"></div>
+    </div>
+    <div class="card">
+      <h3>Matriz 6.5 — Costo Patronal (Cargas de Ley)</h3>
+      <table><thead><tr><th>Concepto</th><th>%</th><th class="num">Mensual</th><th class="num">Anual</th></tr></thead><tbody>
+        <tr><td>Nómina Base Nominal</td><td>100.00%</td><td class="num">${fmt(DATA.nomina)}</td><td class="num">${fmt(DATA.nomina*12)}</td></tr>
+        <tr><td>SFS (Salud Patronal)</td><td>7.09%</td><td class="num">${fmt(c.sfs)}</td><td class="num">${fmt(c.sfs*12)}</td></tr>
+        <tr><td>AFP (Pensión Patronal)</td><td>7.10%</td><td class="num">${fmt(c.afp)}</td><td class="num">${fmt(c.afp*12)}</td></tr>
+        <tr><td>SRL (Riesgos Laborales)</td><td>1.15%</td><td class="num">${fmt(c.srl)}</td><td class="num">${fmt(c.srl*12)}</td></tr>
+        <tr><td>INFOTEP</td><td>1.00%</td><td class="num">${fmt(c.infotep)}</td><td class="num">${fmt(c.infotep*12)}</td></tr>
+        <tr class="total"><td>COSTO DE PERSONAL COMPLETO</td><td>116.34%</td><td class="num">${fmt(c.nominaCompletaMensual)}</td><td class="num">${fmt(c.nominaCompletaAnual)}</td></tr>
+      </tbody></table>
+    </div>
+    ${navFoot('m5')}
+  </div>
+
+  <!-- 6.6 -->
+  <div class="module" id="m6">
+    <div class="mod-header"><div class="eyebrow">Módulo 6.6 · Automático</div><h2>Estado de Resultado ${badge('david','David')}</h2></div>
+    <div class="card">
+      <h3>Matriz 6.6 — Estado de Resultados Proyectado (Año 1)</h3>
+      <table><thead><tr><th>Renglón</th><th class="num">Monto (RD$)</th></tr></thead><tbody>
+        <tr><td>Ingreso por Ventas Brutas</td><td class="num pos">${fmt(c.ventaAnual)}</td></tr>
+        <tr><td>(-) Costo de Ventas (Variables)</td><td class="num neg">(${fmt(c.costoVarAnual)})</td></tr>
+        <tr class="sub"><td>Utilidad Bruta</td><td class="num">${fmt(c.utilidadBruta)}</td></tr>
+        <tr><td>(-) Nómina Completa (con cargas)</td><td class="num neg">(${fmt(c.nominaCompletaAnual)})</td></tr>
+        <tr><td>(-) Alquiler y Servicios Fijos</td><td class="num neg">(${fmt(c.fijosAnual)})</td></tr>
+        <tr><td>(-) Gasto de Depreciación</td><td class="num neg">(${fmt(c.depTotal)})</td></tr>
+        <tr class="sub"><td>Utilidad Antes de Impuestos (UAI)</td><td class="num">${fmt(c.uai)}</td></tr>
+        <tr><td>(-) Impuesto Sobre la Renta (ISR 27%)</td><td class="num neg">(${fmt(c.isr)})</td></tr>
+        <tr class="total"><td>UTILIDAD NETA FINAL</td><td class="num ${c.utilidadNeta>=0?'pos':'neg'}">${fmt(c.utilidadNeta)}</td></tr>
+      </tbody></table>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi ${c.utilidadNeta>=0?'':'gold'}">
+        <div class="lbl">Resultado del Año 1</div>
+        <div class="val">${c.utilidadNeta>=0?'Utilidad':'Pérdida'}</div>
+      </div>
+    </div>
+    ${navFoot('m6')}
+  </div>
+
+  <!-- 6.7 -->
+  <div class="module" id="m7">
+    <div class="mod-header"><div class="eyebrow">Módulo 6.7</div><h2>Indicadores de Viabilidad (VAN/TIR) ${badge('juan','Juan')}</h2></div>
+    <div class="card">
+      <h3>Entrada de datos</h3>
+      <div class="field"><label>Tasa de Descuento Exigida (%)</label><input type="number" id="tasaDescuento" value="${DATA.tasaDescuento}" oninput="upd('tasaDescuento',this.value)"></div>
+      <div class="warn">El flujo de caja proyectado (Utilidad Neta + Depreciación) del Año 1 se mantiene constante para una proyección a 5 años, contra la Inversión Total del Módulo 6.1.</div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="lbl">Valor Actual Neto (VAN)</div><div class="val">${fmt(c.van)}</div></div>
+      <div class="kpi gold"><div class="lbl">Tasa Interna de Retorno (TIR)</div><div class="val">${isFinite(c.tir)?pct(c.tir*100):'N/D'}</div></div>
+    </div>
+    ${navFoot('m7')}
+  </div>
+
+  <!-- 6.8 -->
+  <div class="module" id="m8">
+    <div class="mod-header"><div class="eyebrow">Módulo 6.8 · Automático</div><h2>Evaluación de la Inversión ${badge('juan','Juan')}</h2></div>
+    <div class="card">
+      <h3>Matriz de Decisión Financiera</h3>
+      <table><thead><tr><th>Métrica</th><th>Condición</th><th>Resultado</th><th>Estado</th></tr></thead><tbody>
+        <tr><td>VAN</td><td>Debe ser &gt; 0</td><td class="num">${fmt(c.van)}</td><td class="${c.van>0?'pos':'neg'}">${c.van>0?'Aceptado':'Rechazado'}</td></tr>
+        <tr><td>TIR</td><td>Debe ser &gt; Tasa de Corte (${DATA.tasaDescuento}%)</td><td class="num">${isFinite(c.tir)?pct(c.tir*100):'N/D'}</td><td class="${c.tir*100>DATA.tasaDescuento?'pos':'neg'}">${c.tir*100>DATA.tasaDescuento?'Aceptado':'Rechazado'}</td></tr>
+      </tbody></table>
+    </div>
+    <div class="${c.van>0 && c.tir*100>DATA.tasaDescuento ? 'ok':'warn'}">
+      ${c.van>0 && c.tir*100>DATA.tasaDescuento
+        ? '✓ Proyecto viable y recomendado según los criterios financieros aplicados.'
+        : '⚠️ El proyecto no cumple ambos criterios de aceptación con los supuestos actuales — revisen precios, costos o nómina.'}
+    </div>
+    ${navFoot('m8')}
+  </div>
+
+  <!-- 6.9 -->
+  <div class="module" id="m9">
+    <div class="mod-header"><div class="eyebrow">Módulo 6.9</div><h2>Evaluación del Plan de Negocio ${badge('juan','Juan')}</h2></div>
+    <div class="card">
+      <h3>Conclusiones y observaciones finales (aparecerán en el Word)</h3>
+      <div class="field"><textarea id="conclusiones" oninput="upd('conclusiones',this.value)">${DATA.conclusiones}</textarea></div>
+    </div>
+    ${navFoot('m9')}
+  </div>
+  `;
+}
+
+function upd(key,val){
+  DATA[key] = (key==='conclusiones') ? val : parseFloat(val)||0;
+  const active = document.querySelector('.module.active')?.id || 'm1';
+  renderModules();
+  showModule(active);
+}
+
+/* ============ GUARDAR / CARGAR AVANCE ============ */
+function guardarAvance(){
+  const payload = {tipo:"oishi-avance-financiero", fecha:new Date().toISOString(), datos:DATA};
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `oishi-avance-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+document.getElementById('loadFile').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      const parsed = JSON.parse(ev.target.result);
+      if(parsed.datos){
+        DATA = Object.assign(DATA, parsed.datos);
+        renderModules();
+        showModule('m1');
+        alert('Avance cargado correctamente. Ya puedes continuar llenando tu parte.');
+      } else {
+        alert('El archivo no tiene el formato esperado.');
+      }
+    }catch(err){
+      alert('No se pudo leer el archivo: '+err.message);
+    }
+  };
+  reader.readAsText(file);
+});
+
+/* ============ EXPORTAR A WORD ============ */
+function exportarWord(){
+  const c = calc();
+  const html = `
+  <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+  <head><meta charset="utf-8"><title>Oishi Fast Food — Cap. 6 Análisis Financiero</title>
+  <style>
+    body{font-family:Arial,sans-serif;line-height:1.5;color:#222;}
+    h1{color:#0B2545;font-size:22pt;border-bottom:3px solid #D9A441;padding-bottom:6pt;}
+    h2{color:#0B2545;font-size:15pt;margin-top:22pt;border-bottom:1px solid #ddd;padding-bottom:4pt;}
+    h3{color:#555;font-size:11pt;font-style:italic;}
+    table{width:100%;border-collapse:collapse;margin:12pt 0;}
+    th{background:#0B2545;color:#fff;padding:7px;font-size:10pt;text-align:left;}
+    td{padding:7px;border:1px solid #ddd;font-size:10pt;}
+    .num{text-align:right;}
+    .total{background:#FBF3E1;font-weight:bold;}
+    .ok{background:#EAF6EE;padding:10px;border:1px solid #1E7A46;}
+    .warn{background:#FFF6E5;padding:10px;border:1px solid #D9A441;}
+  </style></head>
+  <body>
+    <h1>OISHI FAST FOOD</h1>
+    <h3>Capítulo 6 — Análisis Financiero · Plan de Negocios UAPA (ADM309)</h3>
+    <p><strong>Elaborado por:</strong> Yasmín de Jesús Zorrilla (6.1-6.3) · David Gabriel Merejo Rivas (6.4-6.6) · Juan Manuel Batista Abreu (6.7-6.9)</p>
+    <p><strong>Fecha de generación:</strong> ${new Date().toLocaleDateString('es-DO')}</p>
+    <hr/>
+
+    <h2>6.1 Inversión Total</h2>
+    <table><tr><th>Componente</th><th class="num">Monto (RD$)</th></tr>
+    <tr><td>Activos Fijos</td><td class="num">${fmt(DATA.af)}</td></tr>
+    <tr><td>Activos Intangibles</td><td class="num">${fmt(DATA.ai)}</td></tr>
+    <tr><td>Capital de Trabajo</td><td class="num">${fmt(DATA.ct)}</td></tr>
+    <tr class="total"><td>INVERSIÓN TOTAL REQUERIDA</td><td class="num">${fmt(c.inversionTotal)}</td></tr></table>
+
+    <h2>6.2 Depreciación (DGII)</h2>
+    <table><tr><th>Categoría</th><th class="num">Inversión</th><th>Tasa</th><th class="num">Depreciación Anual</th></tr>
+    <tr><td>Categoría 1</td><td class="num">${fmt(DATA.cat1)}</td><td>5%</td><td class="num">${fmt(c.dep1)}</td></tr>
+    <tr><td>Categoría 2</td><td class="num">${fmt(DATA.cat2)}</td><td>25%</td><td class="num">${fmt(c.dep2)}</td></tr>
+    <tr><td>Categoría 3</td><td class="num">${fmt(DATA.cat3)}</td><td>15%</td><td class="num">${fmt(c.dep3)}</td></tr>
+    <tr class="total"><td>TOTALES</td><td class="num">${fmt(DATA.cat1+DATA.cat2+DATA.cat3)}</td><td>-</td><td class="num">${fmt(c.depTotal)}</td></tr></table>
+
+    <h2>6.3 Presupuesto de Venta</h2>
+    <table><tr><th>Período</th><th class="num">Unidades</th><th class="num">Precio Promedio</th><th class="num">Ingreso</th></tr>
+    <tr><td>Mensual</td><td class="num">${DATA.cantidad.toLocaleString('es-DO')}</td><td class="num">${fmt(DATA.precio)}</td><td class="num">${fmt(c.ventaMensual)}</td></tr>
+    <tr class="total"><td>Anual</td><td class="num">${(DATA.cantidad*12).toLocaleString('es-DO')}</td><td class="num">${fmt(DATA.precio)}</td><td class="num">${fmt(c.ventaAnual)}</td></tr></table>
+
+    <h2>6.4 Costo Total de Operación</h2>
+    <table><tr><th>Concepto</th><th class="num">Mensual</th><th class="num">Anual</th></tr>
+    <tr><td>Costos Variables</td><td class="num">${fmt(c.costoVarMensual)}</td><td class="num">${fmt(c.costoVarAnual)}</td></tr>
+    <tr><td>Costos Fijos (Alquiler + Servicios)</td><td class="num">${fmt(c.fijosMensual)}</td><td class="num">${fmt(c.fijosAnual)}</td></tr>
+    <tr class="total"><td>COSTO TOTAL OPERACIONAL</td><td class="num">${fmt(c.costoOperMensual)}</td><td class="num">${fmt(c.costoOperAnual)}</td></tr></table>
+
+    <h2>6.5 Costo de Personal</h2>
+    <table><tr><th>Concepto</th><th>%</th><th class="num">Mensual</th><th class="num">Anual</th></tr>
+    <tr><td>Nómina Base</td><td>100%</td><td class="num">${fmt(DATA.nomina)}</td><td class="num">${fmt(DATA.nomina*12)}</td></tr>
+    <tr><td>SFS</td><td>7.09%</td><td class="num">${fmt(c.sfs)}</td><td class="num">${fmt(c.sfs*12)}</td></tr>
+    <tr><td>AFP</td><td>7.10%</td><td class="num">${fmt(c.afp)}</td><td class="num">${fmt(c.afp*12)}</td></tr>
+    <tr><td>SRL</td><td>1.15%</td><td class="num">${fmt(c.srl)}</td><td class="num">${fmt(c.srl*12)}</td></tr>
+    <tr><td>INFOTEP</td><td>1.00%</td><td class="num">${fmt(c.infotep)}</td><td class="num">${fmt(c.infotep*12)}</td></tr>
+    <tr class="total"><td>COSTO DE PERSONAL COMPLETO</td><td>116.34%</td><td class="num">${fmt(c.nominaCompletaMensual)}</td><td class="num">${fmt(c.nominaCompletaAnual)}</td></tr></table>
+
+    <h2>6.6 Estado de Resultado</h2>
+    <table><tr><th>Renglón</th><th class="num">Monto Anual (RD$)</th></tr>
+    <tr><td>Ventas Brutas Anuales</td><td class="num">${fmt(c.ventaAnual)}</td></tr>
+    <tr><td>(-) Costos de Producción</td><td class="num">(${fmt(c.costoVarAnual)})</td></tr>
+    <tr class="total"><td>Utilidad Bruta</td><td class="num">${fmt(c.utilidadBruta)}</td></tr>
+    <tr><td>(-) Nómina Completa Patronal</td><td class="num">(${fmt(c.nominaCompletaAnual)})</td></tr>
+    <tr><td>(-) Alquiler y Servicios</td><td class="num">(${fmt(c.fijosAnual)})</td></tr>
+    <tr><td>(-) Depreciación Anual</td><td class="num">(${fmt(c.depTotal)})</td></tr>
+    <tr class="total"><td>Utilidad Antes de Impuestos (UAI)</td><td class="num">${fmt(c.uai)}</td></tr>
+    <tr><td>(-) ISR (27%)</td><td class="num">(${fmt(c.isr)})</td></tr>
+    <tr class="total"><td>UTILIDAD NETA FINAL</td><td class="num">${fmt(c.utilidadNeta)}</td></tr></table>
+
+    <h2>6.7 Indicadores de Viabilidad</h2>
+    <p><strong>Tasa de Descuento Exigida:</strong> ${DATA.tasaDescuento}%</p>
+    <p><strong>Valor Actual Neto (VAN):</strong> ${fmt(c.van)}</p>
+    <p><strong>Tasa Interna de Retorno (TIR):</strong> ${isFinite(c.tir)?pct(c.tir*100):'No determinable'}</p>
+
+    <h2>6.8 Evaluación de la Inversión</h2>
+    <table><tr><th>Métrica</th><th>Condición de Aceptación</th><th>Estado</th></tr>
+    <tr><td>VAN</td><td>Mayor que Cero</td><td>${c.van>0?'Aceptado (Genera Valor)':'Rechazado'}</td></tr>
+    <tr><td>TIR</td><td>Superior a la Tasa de Corte</td><td>${c.tir*100>DATA.tasaDescuento?'Aceptado (Retorno Superior)':'Rechazado'}</td></tr></table>
+    <div class="${c.van>0 && c.tir*100>DATA.tasaDescuento ? 'ok':'warn'}">
+      ${c.van>0 && c.tir*100>DATA.tasaDescuento ? '¡Proyecto viable y recomendado!' : 'El proyecto requiere ajustes para cumplir los criterios de aceptación financiera.'}
+    </div>
+
+    <h2>6.9 Evaluación del Plan de Negocio</h2>
+    <p>${(DATA.conclusiones||'(Pendiente de redactar por Juan)').replace(/\\n/g,'<br/>')}</p>
+
+  </body></html>`;
+
+  const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Oishi_Cap6_Analisis_Financiero.doc';
+  a.click();
+}
+
+/* ============ INIT ============ */
+renderNav();
+renderModules();
+showModule('m1');
+</script>
+</body>
+</html>
